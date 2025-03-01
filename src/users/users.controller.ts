@@ -13,9 +13,13 @@ import {
 import { CreateUserDTO } from './create-user.dto';
 import { GetUserParamsDTO } from './get-user-params.dto';
 import { PatchUserDto } from './patch-user.dto';
+import { UsersProvider } from './users';
 
 @Controller('users')
 export class UsersController {
+    constructor(private readonly usersProvider: UsersProvider){
+
+    }
     @Get('{:id}') // /users/id
     public findAll(
         @Param() getUserParams: GetUserParamsDTO, @Query('limit', new DefaultValuePipe(10))
@@ -23,17 +27,22 @@ export class UsersController {
         @Query('page', new DefaultValuePipe(1)) page: number,
     ) {
        
-        return 'all users are here';
+        return this.usersProvider.findAll(getUserParams.id);
     }
 
     @Post('create-user') // users/create-user
     public create(@Body() createUserDTO: CreateUserDTO) {
-        console.log(createUserDTO instanceof CreateUserDTO )
-        return createUserDTO;
+       return this.usersProvider.create(createUserDTO);
+    }
+
+    @Post('/login')
+    public login(@Body() userInfo:{email:string,password:string}){
+         return this.usersProvider.login(userInfo.email, userInfo.password)
     }
 
     @Patch(':id') // /user/id
     public updateUser(@Body() patchUserDto: PatchUserDto, @Param()  getUserParams: GetUserParamsDTO){
-        return patchUserDto;
+        return this.usersProvider.update(getUserParams.id, patchUserDto);
     }
+
 }

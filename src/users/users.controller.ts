@@ -14,6 +14,7 @@ import { CreateUserDTO } from './create-user.dto';
 import { GetUserParamsDTO } from './get-user-params.dto';
 import { PatchUserDto } from './patch-user.dto';
 import { UsersProvider } from './users';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
 export class UsersController {
@@ -21,6 +22,18 @@ export class UsersController {
 
     }
     @Get('{:id}') // /users/id
+    @ApiQuery({
+        name:'limit',
+        required:false,
+        type:'number',
+        example:10
+    })
+    @ApiQuery({
+        name:'page',
+        required:false,
+        type:'number',
+        example:1
+    })
     public findAll(
         @Param() getUserParams: GetUserParamsDTO, @Query('limit', new DefaultValuePipe(10))
         limit: number,

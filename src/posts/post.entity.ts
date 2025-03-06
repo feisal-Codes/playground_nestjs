@@ -74,19 +74,19 @@ export class Post{
     publishOn: Date;
 
    
-    @Column({
-        nullable:true,
-        type:"varchar",
-        array:true
+    // @Column({
+    //     nullable:true,
+    //     type:"varchar",
+    //     array:true
 
-    })
-    tags: string[];
+    // })
+    // tags: string[];
 
-    @Column({
-        nullable:true,
-        type:"json"
+    // @Column({
+    //     nullable:true,
+    //     type:"json"
 
-    })
-    metaOptions: CreateMetaOptionsDTO[];
+    // })
+    // metaOptions: CreateMetaOptionsDTO[];
 
 }

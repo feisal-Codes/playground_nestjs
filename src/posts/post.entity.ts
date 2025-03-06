@@ -68,7 +68,7 @@ export class Post{
 
     @Column({
         nullable:true,
-        type:Date
+        type:'timestamp'
 
     })
     publishOn: Date;

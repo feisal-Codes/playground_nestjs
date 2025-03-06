@@ -45,7 +45,7 @@ export class UsersController {
 
     @Post('create-user') // users/create-user
     public create(@Body() createUserDTO: CreateUserDTO) {
-       return this.usersProvider.create(createUserDTO);
+       return this.usersProvider.createUser(createUserDTO);
     }
 
     @Post('/login')

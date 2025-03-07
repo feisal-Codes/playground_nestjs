@@ -13,8 +13,8 @@ import {
 } from "class-validator";
 import { postStatus } from "../enums/postStatus.enum";
 import { postType } from "../enums/postType.enum";
-import { CreateMetaOptionsDTO } from "./create-metaOption.dto";
 import { Type } from "class-transformer";
+import { CreatePostMetaOptionsDto } from "src/meta-options/dto/create-metaoption.dto";
 
 export class CreatePostDTO {
 
@@ -75,12 +75,11 @@ export class CreatePostDTO {
     tags: string[];
 
     @ApiPropertyOptional({ 
-        type: [CreateMetaOptionsDTO], 
+        type: [CreatePostMetaOptionsDto], 
         description: "Additional metadata options for the post" 
     })
     @IsOptional()
-    @IsArray()
     @ValidateNested({ each: true })
-    @Type(() => CreateMetaOptionsDTO)
-    metaOptions: CreateMetaOptionsDTO[];
+    @Type(() => CreatePostMetaOptionsDto)
+    metaOptions?: CreatePostMetaOptionsDto  ;
 }

@@ -1,7 +1,8 @@
-import { IsEnum, IsString } from "class-validator";
+import { IsEnum, IsOptional, IsString } from "class-validator";
 import { postType } from "../enums/postType.enum";
 export class PostQueriesDto{
     
     @IsEnum(postType)
-    postType?:postType;
+    @IsOptional()
+    postType?:postType | undefined;
 }

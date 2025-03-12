@@ -6,7 +6,7 @@ import { MetaOption } from "src/meta-options/meta-options.entity";
 @Entity()
 export class Post{
     @PrimaryGeneratedColumn()
-    id:string;
+    id:number;
     @Column({
         nullable:false,
         length:100,
@@ -83,10 +83,10 @@ export class Post{
     })
     tags: string[];
 
-   @OneToOne(()=>MetaOption,{
-    cascade:true
+   @OneToOne(()=>MetaOption,(metaOption)=>metaOption.post,{
+    cascade:true,
+    // eager:true
    })
-   @JoinColumn()
-   metaOptions?: MetaOption;
+   metaOptions?: MetaOption ;
 
 }

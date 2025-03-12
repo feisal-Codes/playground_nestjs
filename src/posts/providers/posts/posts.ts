@@ -30,21 +30,22 @@ export class Posts {
        
     }
 
-    public async findAll(postType?: postType) {
+    public async findAll(postType?: postType | undefined) {
 
-        let allPost: CreatePostDTO[] = [];
-        if (postType) {
-            allPost = await this.postRepository.find({
-                where:{
-                    postType:postType
-                }
-            })
-        }
-        else {
-            allPost = await this.postRepository.find();
+        let allPosts = await this.postRepository.find({
+            // relations:{
+            //     metaOptions:true
+            // }
+        })
+        return allPosts;
+    }
 
-        }
-        return allPost;
+    public async delete (id:number) {
+ 
+    await this.postRepository.delete(id)
+
+    return {deleted:true, id}
+
     }
 
 

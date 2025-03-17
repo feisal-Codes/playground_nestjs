@@ -3,9 +3,11 @@ import {
     IsArray, 
     IsDate, 
     IsEnum, 
+    IsInt, 
     IsISO8601, 
     IsJSON, 
     IsNotEmpty, 
+    IsNumber, 
     IsOptional, 
     IsString, 
     IsUrl, 
@@ -66,13 +68,13 @@ export class CreatePostDTO {
     publishOn: Date;
 
     @ApiPropertyOptional({ 
-        example: ["nestjs", "validation", "typescript"], 
+        example: ["1", "2", "3"], 
         description: "Tags related to the post" 
     })
     @IsArray()
-    @IsString({ each: true })
+    @IsInt({ each: true })
     @IsOptional()
-    tags: string[];
+    tags?: number[];
 
     @ApiPropertyOptional({ 
         type: [CreatePostMetaOptionsDto], 
@@ -82,4 +84,10 @@ export class CreatePostDTO {
     @ValidateNested({ each: true })
     @Type(() => CreatePostMetaOptionsDto)
     metaOptions?: CreatePostMetaOptionsDto  ;
+
+
+    @IsNotEmpty()
+    @IsNumber()
+    @IsInt()
+    authorId: number;
 }

@@ -10,24 +10,30 @@ import { Post } from './posts/post.entity';
 import { TagsModule } from './tags/tags.module';
 import { Tag } from './tags/tag.entity';
 import { MetaOptionsModule } from './meta-options/meta-options.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 
 @Module({
-  imports: [UsersModule, AuthModule, PostsModule,  TypeOrmModule.forRootAsync({
-
-      useFactory:() =>({
+  imports: [UsersModule, AuthModule, PostsModule, TagsModule, ConfigModule.forRoot({
+    isGlobal:true
+  }),
+  TypeOrmModule.forRootAsync({
+    imports: [ConfigModule],
+    inject:[ConfigService],
+     useFactory:(configService: ConfigService) =>({
+        
         type:'postgres',
         // entities:[User,Post,Tag],
         autoLoadEntities:true,
         synchronize:true,
-        port:5432,
-        username:'postgres',
-        password:'root',
-        host:'localhost',
-        database:'nest'
+        port:configService.get('DB_PORT'),
+        username:configService.get('DB_USERNAME'),
+        password:configService.get('DB_PASSWORD'),
+        host:configService.get('DB_HOST'),
+        database:configService.get('DB_DATABASE')
       })
       
-    }), MetaOptionsModule,
+    }), MetaOptionsModule, 
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,5 +1,5 @@
 import { Injectable,Inject,forwardRef } from '@nestjs/common';
-import { UsersProvider } from 'src/users/users';
+import { UsersProvider } from 'src/users/providers/users';
 
 @Injectable()
 export class Auth {

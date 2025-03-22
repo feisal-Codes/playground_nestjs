@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { CreatePostDTO } from 'src/posts/dto/create-post.dto';
 import { postType } from 'src/posts/enums/postType.enum';
 import { User } from 'src/users/user.entity';
-import { UsersProvider } from 'src/users/users';
+import { UsersProvider } from 'src/users/providers/users';
 import { MetaOption } from 'src/meta-options/meta-options.entity';
 import { TagProvider } from 'src/tags/provider/tags.provider';
 import { PatchPostDto } from 'src/posts/dto/patch-post.dto';

@@ -1,10 +1,10 @@
-import { BadRequestException, forwardRef, Inject, Injectable, RequestTimeoutException } from '@nestjs/common';
+import { BadRequestException, forwardRef, HttpException, Inject, Injectable, RequestTimeoutException } from '@nestjs/common';
 import users from 'src/db/users';
 import { Auth } from 'src/auth/auth';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
-import { Repository } from 'typeorm';
-import { CreateUserDTO } from './create-user.dto';
+import { User } from '../user.entity';
+import { DataSource, Repository } from 'typeorm';
+import { CreateUserDTO } from '../create-user.dto';
 
 @Injectable()
 export class UsersProvider {
@@ -15,6 +15,8 @@ export class UsersProvider {
 
         @Inject(forwardRef(()=>Auth)) 
         private readonly auth:Auth,
+
+        private readonly dataSource: DataSource
     ){
 
     }
@@ -42,20 +44,39 @@ export class UsersProvider {
     if (existingUser){
         throw new BadRequestException('User already exist')
     }
-
+    
 
     let newUser = this.usersRepository.create(createUserDto);
-    newUser = await this.usersRepository.save(newUser);
+    try {
+        newUser = await this.usersRepository.save(newUser);
+
+    } catch (error) {
+        throw new RequestTimeoutException('Unable to save the user', {
+            description:error
+        })
+    }
+    
     return newUser;
 
   }
 
-   public async findOne(id:number){
-    return await this.usersRepository.findOneBy({id})
-   }
+ 
 
+
+
+         
     public findAll(id?: number) {
-        return id ? users.find((user) => user.id == id) : users
+         
+        try {
+            return id ? users.find((user) => user.id == id) : users
+
+            
+        } catch (error) {
+            throw new BadRequestException('user not found',{
+                description:error
+            })
+        }
+
     }
 
     public create(user) {

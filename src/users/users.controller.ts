@@ -13,7 +13,7 @@ import {
 import { CreateUserDTO } from './create-user.dto';
 import { GetUserParamsDTO } from './get-user-params.dto';
 import { PatchUserDto } from './patch-user.dto';
-import { UsersProvider } from './users';
+import { UsersProvider } from './providers/users';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
@@ -40,7 +40,7 @@ export class UsersController {
         @Query('page', new DefaultValuePipe(1)) page: number,
     ) {
        
-        return this.usersProvider.findAll(getUserParams.id);
+        return this.usersProvider.findOne(getUserParams.id);
     }
 
     @Post('create-user') // users/create-user

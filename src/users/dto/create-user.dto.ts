@@ -13,7 +13,6 @@ export class CreateUserDTO {
     secondName: string;
     @IsEmail()
     @MaxLength(100)
-
     @IsNotEmpty()
     email: string;
 

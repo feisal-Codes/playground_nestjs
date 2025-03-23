@@ -10,11 +10,12 @@ import {
     Query,
     ValidationPipe
 } from '@nestjs/common';
-import { CreateUserDTO } from './create-user.dto';
-import { GetUserParamsDTO } from './get-user-params.dto';
-import { PatchUserDto } from './patch-user.dto';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { GetUserParamsDTO } from './dto/get-user-params.dto';
+import { PatchUserDto } from './dto/patch-user.dto';
 import { UsersProvider } from './providers/users';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { CreateManyUsersDto } from './dto/create-many-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -40,12 +41,19 @@ export class UsersController {
         @Query('page', new DefaultValuePipe(1)) page: number,
     ) {
        
-        return this.usersProvider.findOne(getUserParams.id);
+        // return this.usersProvider.findOne(getUserParams.id);
     }
+
+
 
     @Post('create-user') // users/create-user
     public create(@Body() createUserDTO: CreateUserDTO) {
        return this.usersProvider.createUser(createUserDTO);
+    }
+
+    @Post('create-many') 
+    public createManyUsers(@Body() createManyUserDto: CreateManyUsersDto){
+         return this.usersProvider.createManyUser(createManyUserDto);
     }
 
     @Post('/login')

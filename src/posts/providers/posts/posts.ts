@@ -65,7 +65,7 @@ export class Posts {
         }
     }
 
-    public async findAll(userId : number) {
+    public async findAll(userId : number, limit:number, page:number) {
         // const enviroment = this.configService.get('PORT');
         // console.log(enviroment);
         let allPosts:Post[] =[] 
@@ -74,14 +74,21 @@ export class Posts {
 
         let author = await this.userService.findOne(userId);
         if(author) {
+            console.log('page number', page);
+            console.log('skip number', limit);
+
+
             allPosts = await this.postRepository.find({
                 where:{
-                  author
+                  author,
+                
                 },
-                relations:{
-                    tags:true,
-                    author: true
-                }
+                // relations:{
+                //     tags:true,
+                //     author: true
+                // },
+                skip:(page-1)*limit,
+                take : limit
             })
         }
         
@@ -93,8 +100,8 @@ export class Posts {
             throw new HttpException('user not found', 404)
         }
 
-
-        return allPosts;
+        
+        return {allPosts, metaData:{length:allPosts.length, limit:limit, page:page}};
     }
 
     public async findPostByUser(userId:number) {

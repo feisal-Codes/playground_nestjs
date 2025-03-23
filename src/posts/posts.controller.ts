@@ -22,8 +22,8 @@ export class PostsController {
   @Get('{:userId}')
   public findAllPost(@Param('userId') userId: number, @Query() getPostDto: GetPostsDto){
     // const {postType} = postQueriesDto;
-  //  console.log(getPostDto);
-    return this.postService.findAll(userId);
+     console.log(getPostDto);
+    return this.postService.findAll(userId, getPostDto.limit, getPostDto.page);
   }
 
   

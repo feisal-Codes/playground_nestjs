@@ -23,6 +23,11 @@ export class UsersController {
 
     }
     @Get('{:id}') // /users/id
+    public getUser(@Param('id') userId:number){
+        console.log('here')
+        return this.usersProvider.findOne(userId);
+
+    }
     @ApiQuery({
         name:'limit',
         required:false,

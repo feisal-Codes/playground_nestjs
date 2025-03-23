@@ -70,8 +70,21 @@ export class UsersProvider {
     return await this.createManyUsersService.createMany(createManyUserDto)
   }
   public async findOne(id:number){
-    return await this.usersRepository.findOneBy({id})
+    console.log(id)
+    let user:any=undefined
+    try {
+        user = await this.usersRepository.findOneBy({id})
+
+        
+    } catch (error) {
+       new  RequestTimeoutException('could not connect to db')
+    }
+    if(!user){
+         throw new HttpException('user not found', 404);
+    }
+    return user;
    }
+   
  
 
 

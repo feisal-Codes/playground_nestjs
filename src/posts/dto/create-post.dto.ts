@@ -64,7 +64,7 @@ export class CreatePostDTO {
         example: "2025-03-10T10:00:00.000Z", 
         description: "Scheduled publishing date (ISO8601 format)" 
     })
-    @IsISO8601()
+    @IsDate()
     publishOn: Date;
 
     @ApiPropertyOptional({ 

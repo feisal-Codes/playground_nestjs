@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, RequestTimeoutException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from 'src/posts/post.entity';
 import { Repository } from 'typeorm';
@@ -65,18 +65,45 @@ export class Posts {
         }
     }
 
-    public async findAll(postType?: postType | undefined) {
-        const enviroment = this.configService.get('PORT');
-        console.log(enviroment);
+    public async findAll(userId : number) {
+        // const enviroment = this.configService.get('PORT');
+        // console.log(enviroment);
+        let allPosts:Post[] =[] 
 
-        let allPosts = await this.postRepository.find({
-            relations:{
-                tags:true
-            }
-        })
+        try{
+
+        let author = await this.userService.findOne(userId);
+        if(author) {
+            allPosts = await this.postRepository.find({
+                where:{
+                  author
+                },
+                relations:{
+                    tags:true,
+                    author: true
+                }
+            })
+        }
+        
+
+        
+             
+        }
+        catch(error){
+            throw new HttpException('user not found', 404)
+        }
+
+
         return allPosts;
     }
 
+    public async findPostByUser(userId:number) {
+        const posts = await this.postRepository.find({
+            where:{
+                id:userId
+            }
+        })
+    }
 
 
     public async delete (id:number) {

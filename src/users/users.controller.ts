@@ -3,6 +3,8 @@ import {
     Controller,
     DefaultValuePipe,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     ParseIntPipe,
     Patch,
@@ -16,18 +18,21 @@ import { PatchUserDto } from './dto/patch-user.dto';
 import { UsersProvider } from './providers/users';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CreateManyUsersDto } from './dto/create-many-user.dto';
-
+import { PaginationQueryDTO } from 'src/common/pagination/dto/pagination-query.dto';
+import { get } from 'http';
+import { UserLoginDTO } from '../auth/dto/user-login.dto';
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersProvider: UsersProvider){
 
     }
-    @Get('{:id}') // /users/id
-    public getUser(@Param('id') userId:number){
-        console.log('here')
-        return this.usersProvider.findOne(userId);
+    // @Get('{:id}') // /users/id
+    // public getUser(@Param('id') userId:number){
+    //     console.log('here')
+    //     return this.usersProvider.findOne(userId);
 
-    }
+    // }
+    @Get('{:id}') //users/id - id is optional
     @ApiQuery({
         name:'limit',
         required:false,
@@ -41,12 +46,11 @@ export class UsersController {
         example:1
     })
     public findAll(
-        @Param() getUserParams: GetUserParamsDTO, @Query('limit', new DefaultValuePipe(10))
-        limit: number,
-        @Query('page', new DefaultValuePipe(1)) page: number,
+        @Param() getUserParams:GetUserParamsDTO,@Query() paginationQuery:PaginationQueryDTO
     ) {
        
-        // return this.usersProvider.findOne(getUserParams.id);
+        // return this.usersProvider.findAll(paginationQuery,getUserParams.id);
+        return this.usersProvider.findOne(getUserParams.id)
     }
 
 
@@ -60,11 +64,8 @@ export class UsersController {
     public createManyUsers(@Body() createManyUserDto: CreateManyUsersDto){
          return this.usersProvider.createManyUser(createManyUserDto);
     }
-
-    @Post('/login')
-    public login(@Body() userInfo:{email:string,password:string}){
-         return this.usersProvider.login(userInfo.email, userInfo.password)
-    }
+   
+   
 
     @Patch(':id') // /user/id
     public updateUser(@Body() patchUserDto: PatchUserDto, @Param()  getUserParams: GetUserParamsDTO){

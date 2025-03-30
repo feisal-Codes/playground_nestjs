@@ -5,12 +5,14 @@ import { AuthModule } from 'src/auth/auth.module';
 import { User } from './user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersCreateManyProvider } from './providers/users-create-many.provider';
+import { PaginationModule } from 'src/common/pagination/pagination.module';
+import { CreateUserProvider } from './providers/create-user.provider';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersProvider, UsersCreateManyProvider],
+  providers: [UsersProvider, UsersCreateManyProvider, CreateUserProvider],
   exports:[UsersProvider],
-  imports:[forwardRef(()=>AuthModule),TypeOrmModule.forFeature([User])]
+  imports:[forwardRef(()=>AuthModule),TypeOrmModule.forFeature([User]),PaginationModule]
 })
 export class UsersModule {
 

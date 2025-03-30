@@ -11,6 +11,7 @@ import { PatchPostDto } from './dto/patch-post.dto';
 import { GetPostsDto } from './dto/get-posts.dto';
 
 import { PaginationQueryDTO } from 'src/common/pagination/dto/pagination-query.dto';
+import { CreateCommentDTO } from 'src/comments/dto/create-comment.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -19,17 +20,22 @@ export class PostsController {
    
 
   ) {}
-  @Get('{:userId}')
+  @Get('all-posts')
   public findAllPost(@Param('userId') userId: number, @Query() getPostDto: GetPostsDto){
     // const {postType} = postQueriesDto;
      console.log(getPostDto);
-    return this.postService.findAll(userId, getPostDto.limit, getPostDto.page);
+    return this.postService.findAll( getPostDto);
   }
 
   
   @Post('create')
   public async create(@Body() createPostDto: CreatePostDTO) {
    return this.postService.createPost(createPostDto);
+  }
+  @Post('add-comment/{:postId}')
+  public async addComment(@Param('postId', ParseIntPipe) id:number, @Body() createCommentDTO: CreateCommentDTO){
+    console.log('here ')
+    return this.postService.addComment(id, createCommentDTO)
   }
 
   @Patch('update')

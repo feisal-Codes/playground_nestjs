@@ -1,10 +1,11 @@
 import { postType } from "./enums/postType.enum";
 import { postStatus } from "./enums/postStatus.enum";
 import { CreateMetaOptionsDTO } from "./dto/create-metaOption.dto";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { MetaOption } from "src/meta-options/meta-options.entity";
 import { User } from "src/users/user.entity";
 import { Tag } from "src/tags/tag.entity";
+import { Comment } from "src/comments/comments.entity";
 @Entity()
 export class Post{
     @PrimaryGeneratedColumn()
@@ -98,5 +99,10 @@ export class Post{
    @ManyToMany(()=>Tag)
    @JoinTable()
    tags?: Tag[]
+
+   @OneToMany(()=>Comment,(comment)=>comment.post,{
+    cascade:true
+   })
+   comments:Comment[]
 
 }

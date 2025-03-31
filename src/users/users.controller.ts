@@ -10,6 +10,8 @@ import {
     Patch,
     Post,
     Query,
+    SetMetadata,
+    UseGuards,
     ValidationPipe
 } from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user.dto';
@@ -21,6 +23,9 @@ import { CreateManyUsersDto } from './dto/create-many-user.dto';
 import { PaginationQueryDTO } from 'src/common/pagination/dto/pagination-query.dto';
 import { get } from 'http';
 import { UserLoginDTO } from '../auth/dto/user-login.dto';
+import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guard';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { AuthType } from 'src/auth/enums/authTypes';
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersProvider: UsersProvider){
@@ -54,12 +59,12 @@ export class UsersController {
     }
 
 
-
+    @Auth(AuthType.None)
     @Post('create-user') // users/create-user
     public create(@Body() createUserDTO: CreateUserDTO) {
        return this.usersProvider.createUser(createUserDTO);
     }
-
+    // @UseGuards(AccessTokenGuard)
     @Post('create-many') 
     public createManyUsers(@Body() createManyUserDto: CreateManyUsersDto){
          return this.usersProvider.createManyUser(createManyUserDto);

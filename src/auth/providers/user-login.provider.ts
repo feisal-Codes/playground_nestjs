@@ -40,8 +40,7 @@ export class UserLoginProvider {
   public async login(loginDetails: UserLoginDTO) {
       let isAuthenticated: boolean = false;
       try {
-        console.log(loginDetails);
-        console.log('we are here');
+       
         const user = await this.userService.findUserByEmail(loginDetails.email);
 
         if (!user) {

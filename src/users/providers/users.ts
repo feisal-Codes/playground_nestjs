@@ -36,7 +36,6 @@ export class UsersProvider {
     private readonly paginated: PaginationProvider,
 
     private readonly createUserProvider: CreateUserProvider,
-  
   ) {}
 
   public async createUser(createUserDto: CreateUserDTO) {
@@ -47,21 +46,17 @@ export class UsersProvider {
     return await this.createManyUsersService.createMany(createManyUserDto);
   }
 
-
   public async findUserByEmail(email: string) {
-   
-   console.log(email)
+    console.log(email);
     let user: any = undefined;
     try {
-       const users = await this.usersRepository.find()
-       console.log(users)
-       console.log('not executed');
-        user = await this.usersRepository.findOneBy({ email:email });
-     
-        
+      const users = await this.usersRepository.find();
+      console.log(users);
+      console.log('not executed');
+      user = await this.usersRepository.findOneBy({ email: email });
     } catch (error) {
-      console.error(error)
-     throw new RequestTimeoutException('could not connect to db');
+      console.error(error);
+      throw new RequestTimeoutException('could not connect to db');
     }
     if (!user) {
       throw new HttpException('user not found', 404);
@@ -69,18 +64,14 @@ export class UsersProvider {
     return user;
   }
 
-
-
-  public async findOne(id: number ) {
-   
- 
+  public async findOne(id: number) {
     let user: any = undefined;
     try {
-     
-     
-        user = await this.usersRepository.findOneBy({ id:id });
+      console.log(id);
 
-        
+      user = await this.usersRepository.findOneBy({ id: id });
+      console.log('found user');
+      console.log(user);
     } catch (error) {
       new RequestTimeoutException('could not connect to db');
     }
@@ -90,7 +81,6 @@ export class UsersProvider {
     return user;
   }
 
-  
   public findAll(paginationDTO: PaginationQueryDTO, id?: number) {
     try {
       if (id) {

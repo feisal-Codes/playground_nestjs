@@ -32,13 +32,14 @@ export class Posts {
     @InjectRepository(Post) private postRepository: Repository<Post>,
     @InjectRepository(MetaOption)
     private metaOptionRepository: Repository<MetaOption>,
-    private readonly commentsProvider: CommentsProvider
+    private readonly commentsProvider: CommentsProvider,
   ) {}
 
-  public async createPost(createPostDto: CreatePostDTO) {
+  public async createPost(createPostDto: CreatePostDTO, userId: number) {
     // const metaOption = createPostDto.metaOptions ? this.metaOptionRepository.create(createPostDto.metaOptions) : null;
     // await this.metaOptionRepository.save(metaOption);
-    let author = await this.userService.findOne(createPostDto.authorId);
+    let author = await this.userService.findOne(userId);
+    console.log(author);
     let { tags } = createPostDto;
     let tagIds: any = [];
     if (tags?.length && tags.length > 0) {
@@ -114,38 +115,36 @@ export class Posts {
     return { deleted: true, id };
   }
 
-  public async addComment(postId:number,coment:CreateCommentDTO):Promise<Post>{
-        //fetch the post
-        //if it exists add the comment and save
-        //else throw an error
-        let post:Post | null;
-        try {
-          post = await this.postRepository.findOne({
-            where:{id:postId},
-            relations:['comments']
-          })
-          if (!post) {
-            throw new HttpException('post doesnt exist',HttpStatus.BAD_REQUEST)
-          }
-          console.log(post)
-         
+  public async addComment(
+    postId: number,
+    coment: CreateCommentDTO,
+  ): Promise<Post> {
+    //fetch the post
+    //if it exists add the comment and save
+    //else throw an error
+    let post: Post | null;
+    try {
+      post = await this.postRepository.findOne({
+        where: { id: postId },
+        relations: ['comments'],
+      });
+      if (!post) {
+        throw new HttpException('post doesnt exist', HttpStatus.BAD_REQUEST);
+      }
+      console.log(post);
 
-          let comment = await this.commentsProvider.createComment(coment);
-          
-          console.log(coment)
-          if(comment){
-            
-            post.comments.push(comment)
-            await this.postRepository.save(post)
+      let comment = await this.commentsProvider.createComment(coment);
 
-          }
-          
-    
-        } catch (error) {
-          console.log(error)
-           throw new RequestTimeoutException('Request timeout!')
-        }
+      console.log(coment);
+      if (comment) {
+        post.comments.push(comment);
+        await this.postRepository.save(post);
+      }
+    } catch (error) {
+      console.log(error);
+      throw new RequestTimeoutException('Request timeout!');
+    }
 
-        return post;
+    return post;
   }
 }
